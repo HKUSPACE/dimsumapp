@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2014 at 07:03 AM
+-- Generation Time: Nov 29, 2014 at 09:20 AM
 -- Server version: 5.6.14
 -- PHP Version: 5.5.6
 
@@ -42,9 +42,9 @@ CREATE TABLE IF NOT EXISTS `dimsums` (
 --
 
 INSERT INTO `dimsums` (`id`, `name`, `stock`, `type_id`, `created`, `modified`) VALUES
-(1, '馬拉糕', 10, 1, '2014-11-29 07:01:41', '2014-11-29 07:01:41'),
+(1, '馬拉糕', 3, 1, '2014-11-29 07:01:41', '2014-11-29 07:01:41'),
 (2, '叉燒包', 12, 1, '2014-11-29 07:01:50', '2014-11-29 07:01:50'),
-(3, '蝦餃', 20, 4, '2014-11-29 07:02:04', '2014-11-29 07:02:04'),
+(3, '蝦餃', 16, 4, '2014-11-29 07:02:04', '2014-11-29 07:02:04'),
 (4, '燒賣', 15, 3, '2014-11-29 07:02:14', '2014-11-29 07:02:14'),
 (5, '小籠包', 6, 5, '2014-11-29 07:02:24', '2014-11-29 07:02:24'),
 (6, '腸粉', 7, 2, '2014-11-29 07:02:59', '2014-11-29 07:02:59');
@@ -59,9 +59,27 @@ CREATE TABLE IF NOT EXISTS `dimsums_orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `order_id` int(10) unsigned NOT NULL,
   `dimsum_id` int(10) unsigned NOT NULL,
+  `quantity` smallint(5) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`,`dimsum_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=12 ;
+
+--
+-- Dumping data for table `dimsums_orders`
+--
+
+INSERT INTO `dimsums_orders` (`id`, `order_id`, `dimsum_id`, `quantity`) VALUES
+(1, 1, 1, 2),
+(2, 1, 2, 1),
+(3, 1, 6, 3),
+(4, 1, 4, 2),
+(5, 1, 3, 5),
+(6, 1, 5, 1),
+(7, 2, 1, 1),
+(8, 3, 3, 4),
+(9, 4, 1, 2),
+(10, 5, 1, 2),
+(11, 6, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -72,13 +90,25 @@ CREATE TABLE IF NOT EXISTS `dimsums_orders` (
 CREATE TABLE IF NOT EXISTS `orders` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `table_id` int(11) NOT NULL,
-  `price` decimal(6,2) unsigned NOT NULL,
   `pic` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `is_completed` tinyint(1) NOT NULL,
   `created` datetime DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `table_id`, `pic`, `is_completed`, `created`, `modified`) VALUES
+(1, 12, 'Sunny', 0, '2014-11-29 07:45:50', '2014-11-29 07:45:50'),
+(2, 9, 'Alex', 0, '2014-11-29 07:49:17', '2014-11-29 07:49:17'),
+(3, 34, 'Carmen', 0, '2014-11-29 08:46:20', '2014-11-29 08:46:20'),
+(4, 5, 'Flora', 0, '2014-11-29 08:46:59', '2014-11-29 08:46:59'),
+(5, 12, 'Kwun', 0, '2014-11-29 08:53:45', '2014-11-29 08:53:45'),
+(6, 60, 'Sean', 0, '2014-11-29 08:54:09', '2014-11-29 08:54:09'),
+(7, 55, 'Angela', 0, '2014-11-29 08:54:30', '2014-11-29 08:54:30');
 
 -- --------------------------------------------------------
 
