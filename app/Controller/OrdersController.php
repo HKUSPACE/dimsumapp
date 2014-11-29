@@ -2,6 +2,25 @@
 class OrdersController extends AppController{
     public $uses = array('Order', 'Dimsum', 'Type', 'DimsumsOrder');
     
+    public function index(){
+        $orders = $this->Order->find('all', array(
+            'contain' => array(
+                'DimsumsOrder', 
+                'Dimsum'=>array(
+                    'Type'
+                ))
+        ));
+        foreach ($orders as &$order){
+            $total = 0;
+            foreach ($order['Dimsum'] as $dimsum){
+                $total += $dimsum['Type']['price'] * $dimsum['DimsumsOrder']['quantity'];
+            }
+            
+            $order['Order']['price'] = $total;
+        }
+        $this->set('orders', $orders);
+    }
+    
     public function create(){
         $dimsums = $this->Dimsum->find('all', array(
             'contain' => array('Type')
@@ -18,7 +37,7 @@ class OrdersController extends AppController{
             $orderData['Order'] = array(
                 'table_id' => $this->request->data['Order']['table_id'],
                 'pic' => $this->request->data['Order']['pic'],
-                'price' => $total
+                //'price' => $total
             );
             
             if ($this->Order->save($orderData)){
@@ -32,8 +51,13 @@ class OrdersController extends AppController{
                             'quantity' => $amount
                         );
                         
-                        $this->DimsumsOrder->create();
-                        $this->DimsumsOrder->save($data);
+                        if ($this->checkDimsumAmount($key, $amount)){
+                            $this->DimsumsOrder->create();
+
+                            if ($this->DimsumsOrder->save($data)){
+                                $this->deductDimsumAmount($key, $amount);
+                            }
+                        }
                     }
                 }
                 $this->Session->setFlash('Order has been saved.');
@@ -47,6 +71,17 @@ class OrdersController extends AppController{
         $dimsum = $this->Dimsum->findById($id);
         //debug($dimsum);
         return $dimsum['Type']['price'];
+    }
+    
+    private function deductDimsumAmount($dimsumId, $quantity){
+        $dimsum = $this->Dimsum->findById($dimsumId);
+        $dimsum['Dimsum']['stock'] -= $quantity;
+        return $this->Dimsum->save($dimsum);
+    }
+    
+    private function checkDimsumAmount($dimsumId, $quantity){
+        $dimsum = $this->Dimsum->findById($dimsumId);
+        return ($dimsum['Dimsum']['stock'] >= $quantity);
     }
 }
 ?>
