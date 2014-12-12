@@ -1,6 +1,9 @@
 <?php
 class DimsumsController extends AppController{
-    public $uses = array('Dimsum', 'Type');
+	
+	public $components = array('RequestHandler');
+    
+	public $uses = array('Dimsum', 'Type');
         
     public function index(){
         $dimsums = $this->Dimsum->find('all');
@@ -11,6 +14,7 @@ class DimsumsController extends AppController{
         )));
     
         $this->set('types', $types);
+		$this->set('_serialize', array('dimsums', 'types'));
     }
     
     public function add(){
