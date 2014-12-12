@@ -15,6 +15,7 @@ class DimsumsController extends AppController{
     
         $this->set('types', $types);
 		$this->set('_serialize', array('dimsums', 'types'));
+		header('Access-Control-Allow-Origin: *');  
     }
     
     public function add(){
