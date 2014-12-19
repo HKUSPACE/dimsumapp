@@ -4,6 +4,7 @@
 <table>
     <tr>
         <th>ID</th>
+		<th>Photo</th>
         <th>Name</th>
         <th>Stock</th>
         <th>Type</th>
@@ -13,6 +14,7 @@
     <?php foreach ($dimsums as $dimsum): ?>
     <tr>
         <td><?php echo $dimsum['Dimsum']['id']; ?></td>
+		<td><?php echo $this->Html->image('/files/dimsum/photo/'.$dimsum['Dimsum']['id'].'/thumb_'.$dimsum['Dimsum']['photo'], array('class' => 'dimsum-photo')); ?></td>
         <td><?php echo $dimsum['Dimsum']['name']; ?></td>
         <td><?php echo $dimsum['Dimsum']['stock']; ?></td>
         <td><?php echo $types[$dimsum['Dimsum']['type_id']]; ?></td>
