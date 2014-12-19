@@ -1,6 +1,11 @@
 <?php
 class Dimsum extends AppModel{
-    public $actsAs = array('Containable');
+    public $actsAs = array(
+		'Containable',
+		'Upload.Upload' => array(
+			'photo'
+		)
+	);
     public $belongsTo = array('Type');
     public $hasAndBelongsToMany = array('Order');
     public $validate = array(
