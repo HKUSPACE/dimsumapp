@@ -19,16 +19,27 @@ class DimsumsController extends AppController{
     }
     
     public function add(){
+		Configure::write('debug', 0);
         $types = $this->Type->find('list', array('field' => array(
             'Type.id', 'Type.name'
         )));
         
+		$output = array('success' => false);
+		
         $this->set('types', $types);
         if ($this->request->is('post')){
             if ($this->Dimsum->save($this->request->data)){
-                $this->Session->setFlash('New dimsum is added.');
-                $this->redirect('/dimsums/');
+				$output = array('success' => true);
+				$this->set('output', $output);
+				$this->set('_serialize', array('output'));
+                //$this->Session->setFlash('New dimsum is added.');
+                //$this->redirect('/dimsums/');
             }
+			else{
+				$this->set('output', $output);
+				$this->set('_serialize', array('output'));
+			}
+			header('Access-Control-Allow-Origin: *');  
         }
         
     }
